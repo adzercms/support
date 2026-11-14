@@ -9,6 +9,7 @@ use AdzerCMS\Core\Entity\User;
 use AdzerCMS\Core\Ui\Back;
 use AdzerCMS\Support\Help\Help;
 use AdzerCMS\Support\Repository\TicketRepository;
+use AdzerCMS\Support\SupportSettings;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,7 @@ final class HelpController extends AbstractController
 
     public function __construct(
         private readonly Help $help,
+        private readonly SupportSettings $support,
         private readonly TicketRepository $tickets,
     ) {
     }
@@ -67,7 +69,7 @@ final class HelpController extends AbstractController
 
     private function open(): void
     {
-        if (!$this->help->enabled()) {
+        if (!$this->support->helpEnabled()) {
             throw $this->createNotFoundException();
         }
     }

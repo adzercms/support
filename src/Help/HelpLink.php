@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace AdzerCMS\Support\Help;
 
-final readonly class HelpLink
+final class HelpLink
 {
     public function __construct(
-        public string $title,
-        public ?string $summary,
-        public string $url,
-        public ?string $category = null,
+        public readonly string $title,
+        public readonly string $summary,
+        public readonly string $url,
+        public readonly string $category = '',
     ) {
     }
 }

@@ -10,7 +10,6 @@ use AdzerCMS\Contracts\Ui\MenuItem;
 use AdzerCMS\Core\Entity\User;
 use AdzerCMS\Support\Controller\Admin\KnowledgeController;
 use AdzerCMS\Support\Controller\HelpController;
-use AdzerCMS\Support\Help\Help;
 use Symfony\Bundle\SecurityBundle\Security;
 
 use function Symfony\Component\Translation\t;
@@ -21,7 +20,7 @@ final readonly class SupportItems implements Menu
 
     public function __construct(
         private Tickets $tickets,
-        private Help $help,
+        private SupportSettings $support,
         private Security $security,
     ) {
     }
@@ -44,7 +43,7 @@ final readonly class SupportItems implements Menu
 
         return [
             new MenuItem('support_tickets', t('support.menu.tickets'), 700, ['support_'], $group, $this->tickets->waiting($user), icon: 'chat'),
-            ...$this->help->enabled() ? [new MenuItem(HelpController::WINDOW, t('support.menu.help'), 710, [], $group, dialog: true)] : [],
+            ...$this->support->helpEnabled() ? [new MenuItem(HelpController::WINDOW, t('support.menu.help'), 710, [], $group, dialog: true)] : [],
         ];
     }
 }

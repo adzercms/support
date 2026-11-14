@@ -1,7 +1,7 @@
 {
     "name": "adzercms/support",
     "type": "adzercms-module",
-    "description": "Customer support: tickets with attachments, a digest for staff and a knowledge base",
+    "description": "Customer support: tickets with attachments, a digest for staff and help article suggestions",
     "keywords": [
         "adzercms",
         "symfony",
@@ -26,6 +26,7 @@
         "symfony/console": "7.4.*",
         "symfony/dependency-injection": "7.4.*",
         "symfony/framework-bundle": "7.4.*",
+        "symfony/http-client-contracts": "^3.7",
         "symfony/http-foundation": "7.4.*",
         "symfony/polyfill-php86": "^1.43",
         "symfony/routing": "7.4.*",
@@ -51,7 +52,7 @@
         "adzercms": {
             "bundle": "AdzerCMS\\Support\\SupportBundle",
             "description": {
-                "ru": "Поддержка клиентов: обращения с вложениями, сводка сотрудникам и база знаний"
+                "ru": "Поддержка клиентов: обращения с вложениями, сводка сотрудникам и подсказки статей помощи"
             },
             "categories": ["support"],
             "title": {

@@ -12,7 +12,6 @@ use AdzerCMS\Core\Ui\Filter;
 use AdzerCMS\Core\Ui\Table;
 use AdzerCMS\Support\Entity\Ticket;
 use AdzerCMS\Support\Entity\TicketAttachment;
-use AdzerCMS\Support\Help\Help;
 use AdzerCMS\Support\Repository\TicketAttachmentRepository;
 use AdzerCMS\Support\Repository\TicketMessageRepository;
 use AdzerCMS\Support\Repository\TicketRepository;
@@ -42,7 +41,6 @@ final class SupportController extends AbstractController
         private readonly Subjects $subjects,
         private readonly SupportSettings $support,
         private readonly Tickets $service,
-        private readonly Help $help,
     ) {
     }
 
@@ -132,7 +130,7 @@ final class SupportController extends AbstractController
             'staff' => $this->staff($user),
             'support_label' => $ticket->getDepartment(),
             'allowance' => $this->support->attachments(),
-            'help' => $this->help->enabled(),
+            'help' => $this->support->helpEnabled(),
         ]);
     }
 
