@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AdzerCMS\Support\Help;
 
 use AdzerCMS\Contracts\Refusal;
+use AdzerCMS\Core\Text\TextValues;
 use AdzerCMS\Core\Ui\Order;
 use AdzerCMS\Core\Ui\Split;
 use AdzerCMS\Support\Entity\HelpArticle;
@@ -37,6 +38,7 @@ final readonly class KnowledgeForm
         private HelpArticleRepository $articles,
         private HelpArticlePathRepository $paths,
         private EntityManagerInterface $em,
+        private TextValues $values,
     ) {
     }
 
@@ -112,8 +114,10 @@ final readonly class KnowledgeForm
         $title = self::title($input);
         $slug = $this->articleSlug($input, $category, $article);
         $paths = self::paths($input);
-        if ($title instanceof Refusal || $slug instanceof Refusal || $paths instanceof Refusal) {
-            return self::refusals([self::TITLE => $title, self::SLUG => $slug, self::PATHS => $paths]);
+        $body = $input->getString(self::BODY);
+        $values = $this->values->refusal($body, t('support.knowledge.field.body'));
+        if ($title instanceof Refusal || $slug instanceof Refusal || $paths instanceof Refusal || null !== $values) {
+            return self::refusals([self::TITLE => $title, self::SLUG => $slug, self::PATHS => $paths, self::BODY => $values]);
         }
 
         if ($category !== $article->getCategory()) {
@@ -125,7 +129,7 @@ final readonly class KnowledgeForm
             $slug,
             self::optional($input, self::DESCRIPTION),
             Split::items($input->getString(self::TAGS)),
-            $input->getString(self::BODY),
+            $body,
             $input->getBoolean(self::PUBLISHED),
             now(),
         );
@@ -201,7 +205,7 @@ final readonly class KnowledgeForm
     /** @param InputBag<string> $input */
     private function categorySlug(InputBag $input, ?HelpCategory $category): string|Refusal
     {
-        $slug = HelpCategory::slug($input->getString(self::SLUG));
+        $slug = HelpCategory::parse($input->getString(self::SLUG));
         if (null === $slug) {
             return new Refusal(t('support.knowledge.refusal.slug', ['limit' => HelpCategory::SLUG]));
         }
@@ -213,7 +217,7 @@ final readonly class KnowledgeForm
     /** @param InputBag<string> $input */
     private function articleSlug(InputBag $input, HelpCategory $category, ?HelpArticle $article): string|Refusal
     {
-        $slug = HelpCategory::slug($input->getString(self::SLUG));
+        $slug = HelpCategory::parse($input->getString(self::SLUG));
         if (null === $slug) {
             return new Refusal(t('support.knowledge.refusal.slug', ['limit' => HelpCategory::SLUG]));
         }
